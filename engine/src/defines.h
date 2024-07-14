@@ -22,9 +22,9 @@ typedef char b8;
 
 // Properly define static assertions.
 #if defined(__clang__) || defined(__gcc__)
-#define STATIC_ASSERT _Static_assert
+#    define STATIC_ASSERT _Static_assert
 #else
-#define STATIC_ASSERT static_assert
+#    define STATIC_ASSERT static_assert
 #endif
 
 // Ensure all types are of the correct size
@@ -49,43 +49,43 @@ STATIC_ASSERT(sizeof(b8) == 1, "Expected b8 to be of 1 byte");
 
 // Platform detection
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-#define RPLATFORM_WINDOWS 1
-#ifndef _WIN64
-#error "64-bit is required on Windows!"
-#endif
+#    define RPLATFORM_WINDOWS 1
+#    ifndef _WIN64
+#        error "64-bit is required on Windows!"
+#    endif
 
 #elif defined(__linux__) || defined(__gnu_linux__)
-#define RPLATFORM_LINUX 1
-#if defined(__ANDROID__)
-#define RPLATFORM_ANDROID 1
-#endif
+#    define RPLATFORM_LINUX 1
+#    if defined(__ANDROID__)
+#        define RPLATFORM_ANDROID 1
+#    endif
 
 #elif defined(__unix__)
-#define RPLATFORM_UNIX 1
+#    define RPLATFORM_UNIX 1
 
 #elif defined(_POSIX_VERSION)
-#define RPLATFORM_POSIX 1
+#    define RPLATFORM_POSIX 1
 
 #else
-#error "Unknown Platform"
+#    error "Unknown Platform"
 
 #endif
 
 // exporting and importing
 #ifdef REXPORT
 // Exports
-#ifdef _MSC_VER
-#define RAPI __declspec(dllexport)
-#else
-#define RAPI __attribute__((visibility("default")))
-#endif
+#    ifdef _MSC_VER
+#        define RAPI __declspec(dllexport)
+#    else
+#        define RAPI __attribute__((visibility("default")))
+#    endif
 
 #else
 // Imports
-#ifdef _MSC_VER
-#define RAPI __declspec(dllimport)
-#else
-#define RAPI
-#endif
+#    ifdef _MSC_VER
+#        define RAPI __declspec(dllimport)
+#    else
+#        define RAPI
+#    endif
 
 #endif

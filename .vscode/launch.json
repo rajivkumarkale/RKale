@@ -12,7 +12,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/bin",
             "environment": [],
-            "console": "integratedTerminal"
+            "console": "newExternalWindow"
         },
         {
             "name": "(Linux) Launch",

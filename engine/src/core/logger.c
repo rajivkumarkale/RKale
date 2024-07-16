@@ -1,6 +1,6 @@
 #include "logger.h"
 #include "asserts.h"
-
+#include "platform/platform.h"
 // TODO: temporary
 #include <stdio.h>
 #include <string.h>
@@ -23,10 +23,11 @@ void log_output(log_level level, const char* message, ...) {
         "[DEBUG]: ",
         "[TRACE]: "};
 
-    // b8 is_error = level < 2;
+    b8 is_error = level < LOG_LEVEL_WARN;
 
     // 32k characters limit
-    char out_message[32000];
+    const i32 msg_length = 32000;
+    char out_message[msg_length];
     memset(out_message, 0, sizeof(out_message));
 
     // Format original message
@@ -35,12 +36,16 @@ void log_output(log_level level, const char* message, ...) {
     vsnprintf(out_message, 32000, message, arg_ptr);
     va_end(arg_ptr);
 
-    char print_message[32000];
+    char print_message[msg_length];
     memset(print_message, 0, sizeof(print_message));
     sprintf(print_message, "%s%s\n", level_strings[level], out_message);
 
-    // TODO: platform specific output
-    printf("%s", print_message);
+    // platform specific output
+    if (is_error) {
+        platform_console_write_error(print_message, level);
+    } else {
+        platform_console_write(print_message, level);
+    }
 }
 
 void report_assertion_failure(const char* expression, const char* message, const char* file, i32 line) {
